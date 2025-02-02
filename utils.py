@@ -1,6 +1,6 @@
 from fpdf import FPDF
 
-def generar_pdf(cliente, costos, imagen, output_path):
+def generar_pdf(cliente, costos, imagen, output_path, coste_total_siniestro):
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("Arial", size=12)
@@ -25,11 +25,15 @@ def generar_pdf(cliente, costos, imagen, output_path):
     # Costos
     pdf.cell(0, 10, "Desglose de costos:", ln=True)
     for componente in costos:
-        costo_total = round(componente['coste_material'] + componente['coste_mano_obra'],2)
+        costo_total = round(componente['coste_material'] + componente['coste_mano_obra'], 2)
         pdf.cell(0, 10, f"Componente: {componente['componente']}", ln=True)
         pdf.cell(0, 10, f"  - Coste del material: {componente['coste_material']} Eur", ln=True)
         pdf.cell(0, 10, f"  - Coste de la mano de obra: {componente['coste_mano_obra']} Eur", ln=True)
         pdf.cell(0, 10, f"  - Coste total: {costo_total} Eur", ln=True)
+
+    # Coste total del siniestro
+    pdf.cell(0, 10, "", ln=True)  # Línea vacía para separación
+    pdf.cell(0, 10, f"Coste Total Siniestro: {coste_total_siniestro:.2f} Eur", ln=True)
 
     # Guardar el PDF
     pdf.output(output_path)
